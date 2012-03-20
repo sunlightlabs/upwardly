@@ -1,0 +1,12 @@
+numpy
+scipy
+pysal
+pyshp
+
+xlrd
+
+flask
+pymongo
+requests
+geojson
+-e git://github.com/sunlightlabs/saucebrush.git#egg=saucebrush

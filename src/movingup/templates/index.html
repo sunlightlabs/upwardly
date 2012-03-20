@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block bodyclass %}home{% endblock %}
+
+{% block content %}
+			<div class="left">
+			    <h2>A community cost comparison</h2>
+			    <h4>Compare the cost of living and average salaries between areas across the country.</h4>
+		        <p>
+		            Upwardly Mobile lets you find out where in the country it's best to live by comparing various types of salary, living and employment data and ranking it based on your preferences. Now go ahead, start moving up!
+		        </p>
+		    </div>
+			<div class="right">
+				<a id="startComparing" href="{% url get_started %}">Start comparing</a>
+			    <div class="splashImage">
+			    </div>
+			</div>
+			<div class="clear"></div>
+{% endblock %}

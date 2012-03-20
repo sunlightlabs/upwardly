@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+{% load media %}
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Upwardly Mobile</title>
+    <meta name="description" content="Upwardly Mobile lets people find out where in the country they would be better off by comparing various types of data and ranking it based on a person’s preferences. Now go ahead, start moving up!">
+
+    <meta property="og:site_name" content="Upwardly Mobile">
+    <meta property="og:image" content="{% media_url "sharing/facebook-180x180.png" %}">
+    <meta property="fb:admins" content="7812952">
+    {% block opengraph %}
+        <meta property="og:title" content="Upwardly Mobile">
+        <meta property="og:description" content="Upwardly Mobile lets people find out where in the country they would be better off by comparing various types of data and ranking it based on a person’s preferences. Now go ahead, start moving up!">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="http://upwardly.us">
+    {% endblock %}
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,minimum-scale=1,maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link rel="apple-touch-startup-image" href="{% media_url "icons/startup.png" %}">
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" media="screen" href="{% media_url "icons/apple-touch-icon-precomposed.png" %}" />
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" media="screen and (resolution: 163dpi)" href="{% media_url "icons/apple-touch-icon-57x57-precomposed.png" %}" />
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" media="screen and (resolution: 132dpi)" href="{% media_url "icons/apple-touch-icon-72x72-precomposed.png" %}" />
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" media="screen and (resolution: 326dpi)" href="{% media_url "icons/apple-touch-icon-114x114-precomposed.png" %}" />
+    <link rel="apple-touch-icon-precomposed" sizes="512x512" media="screen and (resolution: 326dpi)" href="{% media_url "icons/apple-touch-icon-512x512-precomposed.png" %}" />
+
+    <link rel="shortcut icon" href="{% media_url "icons/favicon.ico" %}">
+
+    {% css "css/main.css" %}
+    {% block css %}{% endblock %}
+
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	{% css "css/ie7styles.css" %}
+	<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="http://use.typekit.com/gxe7dff.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-22821126-14']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+</head>
+<body class="{% block bodyclass %}upwardly{% endblock %}">
+    <header role="banner">
+        <div class="container">
+            <nav id="globalNav">
+                <ul>
+                    <li class="navCompare">
+                        <a href="{% url get_started %}">Compare </a><span class="navBetween">or</span>
+                    </li>
+
+                    <li class="navBrowse">
+                        <a href="/locations/browse/">Browse</a>
+                    </li>
+                    {% comment %}
+                    <li class="navSearch">
+                        <form id="searchform" method="get" action="/search/">
+                            <ul>
+                                <li>
+                                    <label for="id_SearchZipCity">Search by zip or city</label>
+                                    <input id="id_SearchZipCity" class="transparent" type="search" placeholder="Search by zip or city" name="q"> <!--<span class="navBetween"> and </span> -->
+                                </li>
+                                <li class="navSearchButton">
+                                    <button type="submit">
+                                        <span>Search</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </form>
+                    </li>
+                    {% endcomment %}
+                </ul>
+            </nav>
+			<a href="/"><h1 class="logo" id="upwardlyMobile">Upwardly Mobile</h1></a>
+            <div class="clear"></div>
+        </div>
+    </header>
+    <div class="container" role="main">
+        {% block content %}{% endblock %}
+        <div class="clear"></div>
+    </div>
+    <footer role="contentinfo">
+		<div class="footerTop">
+			<div class="container">
+				<a href="http://sunlightfoundation.com" target="sf" class="logo" id="sunlightFoundation">Sunlight Foundation</a>
+				<div class="footerLinks">
+					<a class="footerLink" href="{% url methodology %}">methodology</a>
+					<a class="footerLink" href="{% url feedback %}">feedback</a>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<a class="cowButton" href="">
+				<div id="bubble"></div>
+			</a>
+			<div class="clear"></div>
+		</div>
+		<div class="footerBottom">
+			<div class="container">
+				<a class="knightLogo logo" id="knightFoundation" href="http://www.knightfoundation.org" target="kf">Knight Foundation</a>
+				<p class="aboutSF">
+				 Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable. Visit <a href="http://sunlightfoundation.com" target="sf">SunlightFoundation.com</a> to learn more.
+				</p>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="clear"> </div>
+    </footer>
+
+    {% js "js/movingup-production.js" %}
+    {% if debug %}
+        {% js "js/protoFluid3.02.js" %}
+    {% endif %}
+    {% block js %}{% endblock %}
+
+    <!--[if lt IE 7 ]>
+    {% js "js/libs/dd_belatedpng.js" %}
+    <script> DD_belatedPNG.fix('img, .png_bg');</script>
+    <![endif]-->
+
+</body>
+</html>

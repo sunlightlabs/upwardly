@@ -1,0 +1,220 @@
+{% load movingup_tags %}
+
+<div class="tabHeader">
+	<h3>Cost of Living</h3>
+	<a href="#" title="Flag It" class="flagIt">Flag</a>
+	<div class="clear"></div>
+	<span class="{% bwe comparison.scores.cmp.col_score %} small"></span><span class="tabRankExplanation">{{ location.name }} ranks {% btwtet comparison.scores.cmp.col_score %} {% if compare_to %}{{ compare_to.name }}{% else %}the national average{% endif %} in terms of Cost of Living</span>
+	<div class="clear"></div>
+
+</div>
+
+{% comment %}
+<div class="module">
+	<h4>Over Time</h4>
+	<div class="chart">
+		<div class="key">
+			<span class="resultsCityKey"><span class="color"></span>Burlington, VT</span>
+			<span class="comparisonCityKey"><span class="color"></span>Portland, OR</span>
+			<span class="nationalKey"><span class="color"></span>USA</span>
+			<div class="clear"></div>
+		</div>
+		<img src="{% media_url "images/sample_chart.png" %}"alt="Sample Chart">
+	</div>
+</div>
+{% endcomment %}
+
+<div class="module">
+
+    <h4>Education costs as percentage of national average <small>(lower is better)</small></h4>
+	<div class="key">
+		<span class="resultsCityKey"><span class="color"></span>{{ location.name }}</span>
+		{% if compare_to %}
+		    <span class="comparisonCityKey"><span class="color"></span>{{ compare_to.name }}</span>
+		{% endif %}
+		<div class="clear"></div>
+	</div>
+	<div class="chart" id="education-chart"></div>
+</div>
+<div class="module">
+	<h4>How {{ location.name }}, compares...</h4>
+	<table>
+		<thead>
+			<tr>
+				<th class="compElement">
+				</th>
+				<th class="vsCity" title="{{ compare_to.name }}">
+					vs {{ compare_to.name|truncatechars:12 }}
+				</th>
+				<th class="vsUSA">
+					vs USA
+				</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="odd">
+				{% with comparison.data.rpp_state_apparel as data %}
+					<td class="compElement">
+						Cost of apparel
+						<span class="cmp">{{ data.value|floatformat:1 }}% of national average</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|floatformat:1 }}%
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|floatformat:1 }}%
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="even">
+				{% with comparison.data.rpp_state_education_goods as data %}
+					<td class="compElement">
+						Cost of education goods
+						<span class="cmp">{{ data.value|floatformat:1 }}% of national average</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|floatformat:1 }}%
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|floatformat:1 }}%
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="odd">
+				{% with comparison.data.rpp_state_education_services as data %}
+					<td class="compElement">
+						Cost of education services
+						<span class="cmp">{{ data.value|floatformat:1 }}% of national average</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|floatformat:1 }}%
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|floatformat:1 }}%
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="even">
+				{% with comparison.data.rpp_state_food_goods as data %}
+					<td class="compElement">
+						Cost of food goods
+						<span class="cmp">{{ data.value|floatformat:1 }}% of national average</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|floatformat:1 }}%
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|floatformat:1 }}%
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="odd">
+				{% with comparison.data.rpp_state_food_services as data %}
+					<td class="compElement">
+						Cost of food services
+						<span class="cmp">{{ data.value|floatformat:1 }}% of national average</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|floatformat:1 }}%
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|floatformat:1 }}%
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="even">
+				{% with comparison.data.naccrra_center_infant as data %}
+					<td class="compElement">
+						Cost of infant child care by institutional organization
+						<span class="cmp">{{ data.value|currency }} per year</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|currency }}
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|currency }}
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="odd">
+				{% with comparison.data.naccrra_center_4 as data %}
+					<td class="compElement">
+						Cost of child care for a 4-year old by institutional organization
+						<span class="cmp">{{ data.value|currency }} per year</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|currency }}
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|currency }}
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="even">
+				{% with comparison.data.naccrra_family_infant as data %}
+					<td class="compElement">
+						Cost of infant child care by family or in-home organization
+						<span class="cmp">{{ data.value|currency }} per year</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|currency }}
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|currency }}
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="odd">
+				{% with comparison.data.naccrra_family_4 as data %}
+					<td class="compElement">
+						Cost of child care for a 4-year old by family or in-home organization
+						<span class="cmp">{{ data.value|currency }} per year</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|currency }}
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|currency }}
+					</td>
+				{% endwith %}
+			</tr>
+		</tbody>
+	</table>
+</div>

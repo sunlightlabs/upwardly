@@ -1,0 +1,126 @@
+{% load movingup_tags %}
+
+<div class="tabHeader">
+	<h3>Occupation</h3>
+	<a href="#" title="Flag It" class="flagIt">Flag</a>
+	<div class="clear"></div>
+	<span class="{% bwe comparison.scores.cmp.occupation_score %} small"></span><span class="tabRankExplanation">{{ location.name }} ranks {% btwtet comparison.scores.cmp.occupation_score %} {% if compare_to %}{{ compare_to.name }}{% else %}the national average{% endif %} in terms of Occupations</span>
+	<div class="clear"></div>
+</div>
+
+<div class="module">
+	<h4>Average salary for {{ occupation.name }} <small>(higher is better)</small></h4>
+	<div class="key">
+		<span class="resultsCityKey"><span class="color"></span>{{ location.name }}</span>
+		{% if compare_to %}
+		    <span class="comparisonCityKey"><span class="color"></span>{{ compare_to.name }}</span>
+		{% endif %}
+		{% comment %}<span class="nationalKey"><span class="color"></span>USA</span>{% endcomment %}
+		<div class="clear"></div>
+	</div>
+	<div class="chart" id="salary-chart"></div>
+
+	{% if comparison.data.occupation.is_average %}
+		<p class="note">No occupation data found for {{ occupation.name }} in {{ location.name }}, using local salary average instead.</p>
+	{% endif %}
+	{% if compare_to %}
+		{% if comparison.data.occupation.compare_to.is_average %}
+			<p class="note">No occupation data found for {{ occupation.name }} in {{ compare_to.name }}, using local salary average instead.</p>
+		{% endif %}
+	{% endif %}
+</div>
+<div class="module">
+	<h4>How {{ location.name }}, compares...</h4>
+	<table>
+		<thead>
+			<tr>
+				<th class="compElement">
+				</th>
+				<th class="vsCity" title="{{ compare_to.name }}">
+					vs {{ compare_to.name|truncatechars:12 }}
+				</th>
+				<th class="vsUSA">
+					vs USA
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="odd">
+				{% with comparison.data.occupation as data %}
+					<td class="compElement">
+						Average salary for your occupation
+						<span class="cmp">{{ data.value|currency }} per year</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|currency }}
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|currency }}
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="even">
+				{% with comparison.data.ffiec_avg as data %}
+					<td class="compElement">
+						Average salary for all occupations
+						<span class="cmp">{{ data.value|currency }} per year</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|currency }}
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|currency }}
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="odd">
+				{% with comparison.data.ffiec_high as data %}
+					<td class="compElement">
+						Highest salary average for all occupations
+						<span class="cmp">{{ data.value|currency }} per year</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|currency }}
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|currency }}
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="even">
+				{% with comparison.data.ffiec_low as data %}
+					<td class="compElement">
+						Lowest salary average for all occupations
+						<span class="cmp">{{ data.value|currency }} per year</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|currency }}
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|currency }}
+					</td>
+				{% endwith %}
+			</tr>
+		</tbody>
+	</table>
+
+	<p>It is important to note that factors making up the employment category score include more than just the salary information for your occupation. To calculate the employment score we also look at the income data for the entire area. We do this so that an extremely high salary rate for your occupation doesn’t inflate scores for areas that might be undesirable to live in based on other socioeconomic factors.</p>
+
+
+</div>

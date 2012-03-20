@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block js %}
+    <script>
+
+        var $locateButton = $('a.locate-button');
+        var $zipcode = $('#id_zipcode');
+
+        var setLocationMessage = function(msg) {
+            $('#location-message').html(msg).slideDown();
+        };
+
+        var updateLocation = function(pos) {
+
+            var params = {
+                'lat': pos.coords.latitude,
+                'lng': pos.coords.longitude,
+            }
+
+            $.getJSON('/locations/zipcodes/', params, function(zipcodes) {
+                if (zipcodes.length > 0) {
+                    $zipcode.val(zipcodes[0].postal_code);
+                }
+            });
+
+        };
+
+        var autolocate = function() {
+            navigator.geolocation.getCurrentPosition(updateLocation, function(err) {
+                switch(err.code) {
+                    case err.TIMEOUT:
+                        setLocationMessage('It is taking a while to find your location. Please enter a ZIP Code in the field above.');
+                        break;
+                    case err.POSITION_UNAVAILABLE:
+                        setLocationMessage('We could not determine your location. Please enter a ZIP Code in the field above.');
+                        break;
+                    case err.PERMISSION_DENIED:
+                        setLocationMessage('We do not have permission to find your location. Please check your location settings. You can enter a ZIP Code in the field above to continue.');
+                        break;
+                    case err.UNKNOWN_ERROR:
+                        setLocationMessage('Something went terribly wrong and we are unable to find your current location. Please enter a ZIP Code in the field above.');
+                        break;
+                }
+            });
+        };
+
+        var occupationCache = {};
+
+        var updateOccupations = function(occupations) {
+            var $occupation = $('#id_occupation');
+            $.each(occupations, function(idx, occ) {
+                var $opt = $('<option>')
+                    .attr('value', occ[0])
+                    .text(occ[1]);
+                $occupation.append($opt);
+            });
+        };
+
+        var loadOccupations = function(category_id) {
+            if (occupationCache[category_id]) {
+                   updateOccupations(occupationCache[category_id]);
+            } else {
+                $.getJSON('/occupations/' + category_id + '/', function(occupations) {
+                    updateOccupations(occupations);
+                    occupationCache[category_id] = occupations;
+                });
+            }
+        };
+
+        $(function() {
+            if (navigator.geolocation) {
+                $locateButton.css('display', 'block').click(function(ev) {
+                    autolocate();
+                    ev.preventDefault();
+                });
+                var zipcode = $zipcode.val() || '';
+                if (!zipcode.match(/\d{5}/)) {
+                    autolocate();
+                }
+            }
+            $('#id_category').bind('change', function() {
+                var category_id = $(this).val();
+                $('#id_occupation').find('option').each(function(idx) {
+                    if (idx > 0) {
+                        $(this).remove();
+                    }
+                });
+                if (category_id) {
+                    loadOccupations(category_id);
+                }
+            });
+        });
+
+    </script>
+{% endblock %}
+
+{% block content %}
+        <div id="comparisonCity">
+            <div id="cityName">
+                <h2>Compare your city</h2>
+            </div>
+            <p>
+                Fill out the survey to generate a list of cities where you might be better off economically if you lived there.
+            </p>
+        </div>
+        <div id="compareSurvey">
+            <div class="module">
+                <form action="." method="post" id="compareForm" class="normalForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="update_preferences" value="true">
+                        <fieldset>
+                            <h3>Your comparison city</h3>
+                            <small>This is the city that will be compared to other areas.</small>
+                            {{ form.zipcode.errors }}
+                            <label for="id_zipcode">Zipcode</label>
+							<div class="clear"></div>
+                            {{ form.zipcode }}
+                            <a href="#" class="locate-button">locate</a>
+							<div class="clear"></div>
+                            <div id="location-message"></div>
+                        </fieldset>
+                        <fieldset>
+                            <h3>What type of work do you do?</h3>
+                            {{ form.category.errors }}
+                            <label for="id_category">What is your field?</label>
+                            {{ form.category }}
+                            {{ form.occupation.errors }}
+                            <label for="id_occupation">What is your occupation?</label>
+                            {{ form.occupation }}
+                        </fieldset>
+                        <fieldset>
+                            <h3>Check all that are important to you</h3>
+                            {{ form.weights }}
+                        </fieldset>
+                        <button id="searchButton" type="submit">
+                            <span>Compute</span>
+                        </button>
+                </form>
+            </div>
+        </div>
+{% endblock %}

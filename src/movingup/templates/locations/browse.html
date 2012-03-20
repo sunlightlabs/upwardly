@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="searchResultScreen" class="compare">
+        <div id="comparisonCity">
+			<div id="cityName">
+			<h2>Browse Areas</h2>
+			</div>
+            {% if compare_to %}
+                <h3>Compare {{ compare_to.name }} to...</h3>
+                <p>Now select a comparison city.</p>
+            {% else %}
+                <p>Select a location from the extensive list, or <strong>touch the map</strong> to limit locations to a specific geographic region.</p>
+            {% endif %}
+        </div>
+        <div id="searchResults">
+	        <div id="map" style="height: 200px; width: 100%;"></div>
+            {% for loc in locations %}
+                {% if compare_to %}
+                    <a href="/locations/{{ loc.code }}?occ={{ occupation.id }}&amp;compareto={{ compare_to.code }}">
+                {% else %}
+                    <a href="/locations/{{ loc.code }}?occ={{ occupation.id }}">
+                {% endif %}
+                    <div class="srCity">
+                        <h3 class="cityName">{{ loc.name }}</h3>
+                        <div class="clear"></div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="clear"></div>
+{% endblock %}
+
+{% block js %}
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCwMprMBYoz-7FxsF1_YLBHKGEwdvtJp4w&amp;sensor=false"></script>
+    <script>
+
+        var gm = google.maps;
+
+        $().ready(function() {
+
+            var map = new gm.Map(document.getElementById("map"), {
+                center: new gm.LatLng(38, -99),
+                disableDoubleClickZoom: true,
+                draggable: false,
+                mapTypeControl: false,
+                mapTypeId: gm.MapTypeId.ROADMAP,
+                streetViewControl: false,
+                zoom: 3,
+                zoomControl: false
+            });
+
+            var nearMarker;
+
+            {% if near %}
+                nearMarker = new gm.Marker({
+                    position: new gm.LatLng({{ near.lat }}, {{ near.lng }}),
+                    map: map
+                });
+            {% endif %}
+
+            gm.event.addListener(map, 'click', function(ev) {
+
+                var data = {
+                    lat: ev.latLng.lat(),
+                    lng: ev.latLng.lng()
+                };
+                var pos = new gm.LatLng(data.lat, data.lng);
+
+                if (nearMarker === undefined) {
+                    nearMarker = new gm.Marker({
+                        position: pos,
+                        map: map
+                    });
+                } else {
+                    nearMarker.setPosition(pos);
+                }
+
+                $.getJSON('/locations/nearby/?limit=15', data, function(locations) {
+
+                    $('#searchResults a').remove();
+
+                    $.each(locations, function(i, loc) {
+
+                        var url = '/locations/' + loc.code + '/?occ={{ occupation.id }}';
+                        {% if compare_to %}
+                            url += '&amp;compareto={{ compare_to.code }}';
+                        {% endif %}
+
+                        var html = '<div class="srCity"><h3 class="cityName">' + loc.name + '</h3><div class="clear"></div></div>';
+                        var $a = $('<a>').html(html).attr('href', url);
+                        $('#searchResults').append($a);
+
+                    });
+                });
+
+            });
+        });
+    </script>
+{% endblock %}

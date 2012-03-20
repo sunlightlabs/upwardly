@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Maps{% endblock %}
+
+{% block css %}
+    <style>
+        #map { border-bottom: 1px solid #000; border-top: 1px solid #000; height: 450px; width: 100%; }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script>
+    
+        var g = google.maps,
+            map = null;
+            
+        var quickMSA = function(ev) {
+            var code = $(this).attr('data-code');
+            $('#msa-code-field').val(code);
+            loadMSA(code);
+            ev.preventDefault();
+        };
+        
+        $().ready(function() {
+            map = new g.Map(document.getElementById("map"), {
+                zoom: 6,
+                center: new g.LatLng(38.9065, -77.0428),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            g.event.addListener(map, 'click', function(me) {
+                $('#latitude-field').val(me.latLng.lat());
+                $('#longitude-field').val(me.latLng.lng());
+            });
+            
+            $('#msa-form').submit(function(ev) {
+                var code = $('#msa-code-field').val();
+                loadMSA(code);
+                ev.preventDefault();
+            });
+            $('#msa-search-form').submit(function(ev) {
+                var query = $('#msa-query-field').val();
+                searchMSAs(query);
+                ev.preventDefault();
+            });
+            $('#msa-search-reset').click(function(ev) {
+                $('ul.search-results').empty();
+                ev.preventDefault();
+            });
+            $('#latlng-form').submit(function(ev) {
+                var lat = $('#latitude-field').val();
+                var lng = $('#longitude-field').val();
+                loadLatLng(lat, lng);
+                ev.preventDefault();
+            });
+            $('a.quick-msa').click(quickMSA);
+        });
+        
+        var loadLatLng = function(lat, lng) {
+            var ll = new g.LatLng(lat, lng);
+            var marker = new g.Marker({
+                map: map,
+                flat: true,
+                position: ll,
+                title: lat + ', ' + lng
+            });
+            map.panTo(ll);
+        };
+        
+        var searchMSAs = function(query) {
+            var $resList = $('ul.search-results').empty();
+            $.getJSON('/msa', {q: query}, function(data) {
+                $.each(data, function(index, msa) {
+                    if (msa.code && msa.name) {
+                        $resList.append(
+                            $('<li>').append(
+                                $('<a>')
+                                    .attr('href', '/msa/' + msa.code)
+                                    .attr('data-code', msa.code)
+                                    .addClass('quick-msa')
+                                    .text(msa.name)
+                                    .click(quickMSA)
+                            )
+                        );
+                    }
+                });
+            });
+        };
+        
+        var loadedMSAs = {};
+        
+        var loadMSA = function(code) {
+            if (loadedMSAs[code]) {
+                
+                map.panTo(loadedMSAs[code].centroid);
+                
+            } else {
+                $.getJSON('/msa/' + code, function(data) {
+                
+                    var centroid = new g.LatLng(data.geo.centroid[0], data.geo.centroid[1]);
+                
+                    var msa = {
+                        name: data.name,
+                        centroid: centroid,
+                        shapes: []
+                    };
+                
+                    $.each(data.geo.shapes, function(index, points) {
+                        var coords = $.map(points, function(point, index) {
+                            return new g.LatLng(point[0], point[1]);
+                        });
+                        var line = new g.Polygon({
+                            map: map,
+                            paths: coords,
+                            fillColor: 'blue',
+                            fillOpacity: 0.35,
+                            strokeOpacity: 0
+                        });
+                        msa.shapes.push(line);
+                    });
+                
+                    var dot = new g.Circle({
+                        map: map,
+                        center: centroid,
+                        fillColor: 'blue',
+                        fillOpacity: 0.35,
+                        strokeOpacity: 0,
+                        radius: 5000
+                    });
+                
+                    map.panTo(centroid);
+                
+                    loadedMSAs[code] = msa;
+                
+                });
+            }
+        };
+        
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div id="map"></div>
+    <div class="content">
+        
+        <h2>Find MSA</h2>
+        <form action="/msa" method="get" id="msa-search-form">
+            <label for="msa-query-field">Search query</label>
+            <input type="search" name="query" id="msa-query-field">
+            <input type="submit">
+            <a href="/" id="msa-search-reset">reset</a>
+        </form>
+        
+        <ul class="search-results"></ul>
+        
+        <h2>Map MSA</h2>
+        <form action="/msa" method="get" id="msa-form">
+            <label for="msa-code-field">MSA Code</label>
+            <input type="text" name="code" id="msa-code-field" value="35620" size="5" maxlength="5">
+            <input type="submit">
+        </form>
+        <ul>
+            <li><a href="#" class="quick-msa" data-code="35620">New York-Northern New Jersey-Long Island, NY-NJ-PA</a></li>
+            <li><a href="#" class="quick-msa" data-code="35644">New York-Wayne-White Plains, NY-NJ</a></li>
+            <li><a href="#" class="quick-msa" data-code="47900">Washington-Arlington-Alexandria, DC-VA-MD-WV</a></li>
+        </ul>
+        
+        <h2>Drop Marker</h2>
+        <form action="#" method="get" id="latlng-form">
+            <label for="latitude-field">Latitude</label>
+            <input type="text" name="latitude" id="latitude-field" size="9" value="25.568">
+            <label for="longitude-field">Longitude</label>
+            <input type="text" name="longitude" id="longitude-field" size="9" value="-80.441">
+            <input type="submit">
+        </form>
+        
+    </div>
+{% endblock %}

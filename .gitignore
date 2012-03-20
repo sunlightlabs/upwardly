@@ -1,0 +1,11 @@
+*.db
+*.pyc
+.DS_Store
+local_settings.py
+build/
+data/cpi/
+data/ffiec/
+data/locations/
+data/nces/
+data/rpp/
+db/

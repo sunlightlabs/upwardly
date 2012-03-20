@@ -1,0 +1,53 @@
+#cityNav li.unselected{
+    border-left: none;
+    border-right: none;
+    background-color: #e9f0e9;      
+    background-image: url('../images/tab_border.png');
+    background-position: right top;
+    background-repeat: no-repeat;
+    filter: none;
+
+}
+#cityNav li#jobsTab{
+    border-left: none;
+    border-right: none;
+    background-color: #e9f0e9;      
+    background-image: url('../images/tab_border.png');
+    background-position: right top;
+    background-repeat: no-repeat;
+    filter: none;
+}
+#cityNav li#housingTab{
+    border-left: none;
+    border-right: none;
+    background-color: #e9f0e9;      
+    background-image: url('../images/tab_border.png');
+    background-position: right top;
+    background-repeat: no-repeat;
+    filter: none;
+
+    }
+#cityNav li#colTab{
+    border-left: none;
+    border-right: none;
+    background-color: #e9f0e9;      
+    background-image: url('../images/tab_border.png');
+    background-position: right top;
+    background-repeat: no-repeat;
+    filter: none;
+
+}
+#cityNav li#qolTab{
+    border-left: none;
+    border-right: none;
+    background-color: #e9f0e9;      
+    background-image: url('../images/tab_border.png');
+    background-position: right top;
+    background-repeat: no-repeat;
+    filter: none;
+
+}
+.white_content form{
+    overflow: hidden;
+    
+}

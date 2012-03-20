@@ -1,0 +1,94 @@
+{% load movingup_tags %}
+
+<div class="tabHeader">
+	<h3>Housing</h3>
+	<a href="#" title="Flag It" class="flagIt">Flag</a>
+	<div class="clear"></div>
+	<span class="{% bwe comparison.scores.cmp.housing_score %} small"></span><span class="tabRankExplanation">{{ location.name }} ranks {% btwtet comparison.scores.cmp.housing_score %} {% if compare_to %}{{ compare_to.name }}{% else %}the national average{% endif %} in terms of Housing</span>
+	<div class="clear"></div>
+
+</div>
+<div class="module">
+	<h4>Housing costs as percentage of national average <small>(lower is better)</small></h4>
+	<div class="key">
+		<span class="resultsCityKey"><span class="color"></span>{{ location.name }}</span>
+		{% if compare_to %}
+		    <span class="comparisonCityKey"><span class="color"></span>{{ compare_to.name }}</span>
+		{% endif %}
+		<div class="clear"></div>
+	</div>
+	<div class="chart" id="housing-chart"></div>
+</div>
+<div class="module">
+	<h4>How {{ location.name }}, compares...</h4>
+	<table>
+		<thead>
+			<tr>
+				<th class="compElement">
+				</th>
+				<th class="vsCity" title="{{ compare_to.name }}">
+					vs {{ compare_to.name|truncatechars:12 }}
+				</th>
+				<th class="vsUSA">
+					vs USA
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="odd">
+				{% with comparison.data.rpp_state_housing_goods as data %}
+					<td class="compElement">
+						Cost of housing goods
+						<span class="cmp">{{ data.value|floatformat:1 }}% of national average</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|floatformat:1 }}%
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|floatformat:1 }}%
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="even">
+				{% with comparison.data.rpp_state_housing_services as data %}
+					<td class="compElement">
+						Cost of housing services
+						<span class="cmp">{{ data.value|floatformat:1 }}% of national average</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|floatformat:1 }}%
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|floatformat:1 }}%
+					</td>
+				{% endwith %}
+			</tr>
+			<tr class="odd">
+				{% with comparison.data.rpp_state_rents as data %}
+					<td class="compElement">
+						Cost of rent
+						<span class="cmp">{{ data.value|floatformat:1 }}% of national average</span>
+					</td>
+					<td class="vsCity">
+						{% if comparison.compare_to %}
+							<span class="{% bwe data.compare_to.cmp %}">{% bwe data.compare_to.cmp %}</span>
+							{{ data.compare_to.value|floatformat:1 }}%
+						{% endif %}
+					</td>
+					<td class="vsUSA">
+						<span class="{% bwe data.national.cmp %}">{% bwe data.national.cmp %}</span>
+						{{ data.national.value|floatformat:1 }}%
+					</td>
+				{% endwith %}
+			</tr>
+		</tbody>
+	</table>
+</div>

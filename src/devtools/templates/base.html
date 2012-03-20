@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}K2{% endblock %} : Moving Up Development Tools</title>
+    <style>
+        * { font-family: sans-serif; font-size: 11pt; }
+        html, body { margin: 0; padding: 0; }
+        .content { margin: 1em; }
+    </style>
+    {% block css %}{% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+    {% block js %}{% endblock %}
+</body>
+</html>

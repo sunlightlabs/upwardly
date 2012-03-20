@@ -1,0 +1,45 @@
+{% extends "locations/base.html" %}
+
+{% block xcontent %}
+
+    {% if compare_to %}
+        <p class="comparison-note">
+            Better/Worse results are calculated based on your comparison city of <strong>{{ compare_to.name }}</strong>
+        </p>
+    {% endif %}
+    
+    <header>
+        
+        <h1>{{ location.name }}</h1>
+        <dl>
+            
+            <dt>Population</dt>
+            <dd>000,000</dd>
+            
+            <dt>Average age</dt>
+            <dd>24</dd>
+            
+            <dt>Voter turnout</dt>
+            <dd>65%</dd>
+            
+            <dt>Square miles</dt>
+            <dd>alot</dd>
+            
+            <dt>Geographic region</dt>
+            <dd>Mid-atlantic</dd>
+            
+        </dl>
+        <img src="" class="msa-map">
+        
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="{% url finances location.code %}">Finances</a></li>
+            <li><a href="{% url employment location.code %}">Employment</a></li>
+            <li><a href="{% url housing location.code %}">Housing</a></li>
+            <li><a href="{% url lifestyle location.code %}">Lifestyle</a></li>
+        </ul>
+    </nav>
+    
+{% endblock %}

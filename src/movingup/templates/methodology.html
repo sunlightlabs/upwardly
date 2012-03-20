@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="methodology">
+	<div id="comparisonCity">
+		<div id="cityName">
+			<h2>Tell me about Upwardly Mobile...</h2>
+		</div>
+    </div>
+
+
+	<div class="right">
+		<div class="module">
+
+		<p class="highlight">Upwardly Mobile tailors economic data for each individual user so he or she can see where in the country they could enjoy financial security and an improved quality of life. Part of putting this app together included deciding which economic factors make the greatest difference in people’s lives. For instance, we decided that making more money in an area matters more than any of the other economic indicators. Therefore, the salary data for your occupation is automatically ranked the highest when generating the list of ideal places for you to live. The importance of the rest of the data is decided by your selections in the survey.</p>
+
+		<h3>Data Sources</h3>
+
+		<p>The app uses multiple data sources to calculate scores for each city which are listed below. All of the data with the exception of the child care data is provided by the federal government.</p>
+		<ol>
+		    <li>Regional Price Parities data by the <a href="http://bea.gov/">Bureau of Economic Analysis</a> provides actual cost of living estimates for each state. The data includes price parities for rent, apparel, education goods and services, food goods and services and housing goods and services for all 50 states and the District of Columbia.</li>
+		    <li><a href="http://www.ffiec.gov/">Federal Financial Institutions Examinations Council</a> (FFEIC) provides the survey with average annual income information for families for every metropolitan statistical area in the country.</li>
+		    <li><a href="http://www.bls.gov/oes/">Occupational Employment Statistics</a> provides provides salary information for occupations by metropolitan statistical area. This information allows us to see the minimum, maximum and average salary for a person’s job in a specific area.</li>
+		    <li>Child care cost data from the <a href="http://www.naccrra.org/">National Association of Child Care Resource and Referral Agencies</a> (NACCRRA), a non-profit, shows the average child care cost per state.</li>
+		    <li>U.S. Census data provides basic demographics for areas displayed.</li>
+		</ol>
+
+		<h3>Location Scoring</h3>
+		<p>For each of the data points we calculate the mean and standard deviation of the data set. Each location will receive plus or minus one point for each standard deviation its value is away from the mean. The points will then be weighted based on the priorities specified by the user. For example, a user may indicate gas prices are very important to him or her, or the user has children and child care costs matter the most, etc. The sum of the weighted points will be a single value score for the location. This score will be used to rank location and occupation combinations that will be presented to the user.</p>
+		<p>The average income for families data provided by the FFEIC also affects the score assigned to each location. Just like the rest of the data sets, we assign a point or take a point away from locations based on how far an area’s average family income is from the mean. However, unlike the rest of the data sources, this location is not based on a user’s preferences.</p>
+		<p>After filling out the preferences form, users will be shown their current location and a list of top ranked locations based on the weighted score. Each location will display not the exact score, but simply whether it scores higher or lower than their current location does.</p>
+		</div>
+	</div>
+</div>
+{% endblock %}

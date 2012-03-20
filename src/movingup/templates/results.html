@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load movingup_tags %}
+
+{% block content %}
+    <div id="searchResultScreen" class="compare">
+        <div id="comparisonCity">
+            <div id="cityName">
+				Your city
+                <h2>{{ current_location.name }}</h2>
+					For <span class="yourJob">{{ occupation.name }}</span>
+            </div>
+            <p>
+                Here is a list of metropolitan areas to compare to your current area. These area were selected based on the preferences selected in the survey and the occupation entered. For information on how each place is scored and ranked, see the methodology page.
+            </p>
+        </div>
+        <div id="searchResults">
+            <div class="srHeader">
+                <h4 class="cat cityName">
+                    Comparison cities
+                </h4>
+                <div class="colHeads">
+                    <span class="mobileCatCont">
+						<div title="Employment" class="cat jobs">
+	                        Jobs
+	                    </div>
+					</span>
+                    <span class="mobileCatCont">
+	                    <div title="Housing" class="cat housing">
+	                        Housing
+	                    </div>
+					</span>
+                    <span class="mobileCatCont">
+	                    <div title="Cost of Living" class="cat col">
+	                        Cost of Living
+	                    </div>
+					</span>
+                    <span class="mobileCatCont">
+	                    <div title="Quality of Life" class="cat qol">
+	                        Quality of Life
+	                    </div>
+					</span>
+                </div>
+                <div class="clear"></div>
+            </div>
+			<ol>
+            {% for loc in locations %}
+				<li>
+	                <a href="/locations/{{ loc.code }}/?compareto={{ current_location.id }}{% if occupation %}&amp;occ={{ occupation.id }}{% endif %}">
+	                    <div class="srCity">
+	                        <span class="cityName">{{ loc.name }}</span>
+	                        <div class="relativeScore">
+			                    <span class="mobileCatCont">
+		                            <span class="jobs {% bwe loc.occupation_score score.occupation_score %}">{% bwe loc.occupation_score score.occupation_score %}</span>
+								</span>
+			                    <span class="mobileCatCont">
+		                            <span class="housing {% bwe loc.housing_score score.housing_score %}">{% bwe loc.housing_score score.housing_score %}</span>
+								</span>
+			                    <span class="mobileCatCont">
+		                            <span class="col {% bwe loc.col_score score.col_score %}">{% bwe loc.col_score score.col_score %}</span>
+								</span>
+			                    <span class="mobileCatCont">
+		                            <span class="qol {% bwe loc.qol_score score.qol_score %}">{% bwe loc.qol_score score.qol_score %}</span>
+								</span>
+	                        </div>
+	                        <div class="clear"></div>
+	                    </div>
+	                </a>
+				</li>
+            {% endfor %}
+			</ol>
+        </div>
+    </div>
+    <div class="clear"></div>
+{% endblock %}

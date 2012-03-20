@@ -1,0 +1,411 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load movingup_tags %}
+
+{% block js %}
+	{% js "js/rgbcolor.js" %}
+	{% js "js/canvg.js" %}
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script>
+
+		var supportsSVG = !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect;
+
+		var svg2canvas = function(svgId) {
+
+			var $svg = $('#' + svgId);
+
+			var canvasId = svgId + '-canvas';
+
+			$('#' + canvasId).remove();
+
+			var $canvas = $('<canvas>')
+				.attr('id', canvasId)
+				.addClass('chart')
+				.css({
+					height: '150px',
+					width: $('div.chart').width() + 'px'
+				})
+				.insertAfter($svg);
+
+      		var svgContent = $(
+      				$svg.find('iframe')
+      					.attr('contentWindow').document.body
+      			).find('#chartArea').html();
+
+      		canvg($canvas[0], svgContent);
+
+      		$svg.hide();
+
+		}
+
+		var drawCharts = function() {
+
+			var chartWidth = $('div.chart').width();
+
+		    /*
+		     * recreation chart
+		     */
+
+		    var data = new google.visualization.DataTable();
+
+		    data.addColumn('string', '');
+	      	data.addColumn('number', '{{ location.name }}');
+            {% if compare_to %}
+                data.addColumn('number', '{{ compare_to.name }}');
+            {% endif %}
+
+            data.addRows([{{ chart_data.recreation|safe }}]);
+
+            var rppChart = new google.visualization.BarChart(document.getElementById('recreation-chart'));
+            rppChart.draw(data, {
+                height: 150,
+                backgroundColor: '#f4faf5',
+                chartArea: {left: 20, width: '90%'},
+                colors: ['#79a417', '#fd6c40', '#f79c03'],
+                hAxis: {baselineColor: '#253F45', format: '###%', minValue: 0, maxValue: 2, textStyle: {color: '#253F45'}},
+                legend: {position: 'none'},
+                pointSize: 5,
+                tooltip: {trigger: 'none'},
+                vAxis: {baselineColor: '#253F45', textPosition: 'none', textStyle: {color: '#253F45'}},
+                width: chartWidth
+            });
+
+		    /*
+		     * education chart
+		     */
+
+		    var data = new google.visualization.DataTable();
+
+		    data.addColumn('string', '');
+	      	data.addColumn('number', '{{ location.name }}');
+            {% if compare_to %}
+                data.addColumn('number', '{{ compare_to.name }}');
+            {% endif %}
+
+            data.addRows([{{ chart_data.education|safe }}]);
+
+            var rppChart = new google.visualization.BarChart(document.getElementById('education-chart'));
+            rppChart.draw(data, {
+                height: 150,
+                backgroundColor: '#f4faf5',
+                chartArea: {left: 20, width: '90%'},
+                colors: ['#79a417', '#fd6c40', '#f79c03'],
+                hAxis: {baselineColor: '#253F45', format: '###%', minValue: 0, maxValue: 2, textStyle: {color: '#253F45'}},
+                legend: {position: 'none'},
+                pointSize: 5,
+                tooltip: {trigger: 'none'},
+                vAxis: {baselineColor: '#253F45', textPosition: 'none', textStyle: {color: '#253F45'}},
+                width: chartWidth
+            });
+
+		    /*
+		     * housing chart
+		     */
+
+		    var data = new google.visualization.DataTable();
+
+		    data.addColumn('string', '');
+	      	data.addColumn('number', '{{ location.name }}');
+            {% if compare_to %}
+                data.addColumn('number', '{{ compare_to.name }}');
+            {% endif %}
+
+            data.addRows([{{ chart_data.housing|safe }}]);
+
+            var rppChart = new google.visualization.BarChart(document.getElementById('housing-chart'));
+            rppChart.draw(data, {
+                height: 150,
+                backgroundColor: '#f4faf5',
+                chartArea: {left: 20, width: '90%'},
+                colors: ['#79a417', '#fd6c40', '#f79c03'],
+                hAxis: {baselineColor: '#253F45', format: '###%', minValue: 0, maxValue: 2, textStyle: {color: '#253F45'}},
+                legend: {position: 'none'},
+                pointSize: 5,
+                tooltip: {trigger: 'none'},
+                vAxis: {baselineColor: '#253F45', textPosition: 'none', textStyle: {color: '#253F45'}},
+                width: chartWidth
+            });
+
+            /*
+             * employment chart
+             */
+
+			var data = new google.visualization.DataTable();
+
+	      	data.addColumn('string', 'Year');
+	      	data.addColumn('number', '{{ location.name }}');
+	      	{% if compare_to %}
+	    		data.addColumn('number', '{{ compare_to.name }}');
+	      	{% endif %}
+
+	      	data.addRows({{ chart_data.salary|safe }});
+
+			var formatter = new google.visualization.NumberFormat({prefix: '$'});
+			formatter.format(data, 1);
+			{% if compare_to %}
+				formatter.format(data, 2);
+			{% endif %}
+
+			var chart = new google.visualization.LineChart(document.getElementById('salary-chart'));
+      		chart.draw(data, {
+      		    hAxis: {
+      		        baselineColor: '#253F45',
+      		        textStyle: {color: '#253F45'}
+      		    },
+				height: 150,
+				backgroundColor: '#f4faf5',
+				colors: ['#79a417', '#fd6c40', '#f79c03'],
+				legend: {position: 'none'},
+				pointSize: 5,
+				vAxis: {
+				    format: '$###,###',
+				    textStyle: {color: '#253F45'}
+				},
+                width: chartWidth
+        	});
+
+        	console.log(supportsSVG);
+
+        	if (!supportsSVG) {
+	        	svg2canvas('salary-chart');
+	        	svg2canvas('housing-chart');
+	        	svg2canvas('education-chart');
+	        	svg2canvas('recreation-chart');
+        	}
+
+		};
+
+		google.load('visualization', '1', {'packages':['corechart']});
+		google.setOnLoadCallback(drawCharts);
+
+		$().ready(function() {
+
+			/*
+			 * contact form stuff
+			 */
+
+			var $light = $('#light');
+			var $fade = $('#fade');
+			var $flagForm = $('form#flagForm');
+
+			var openContactForm = function() {
+				$flagForm.show();
+				$('div.thankyou').hide();
+				$light.show();
+				$fade.show();
+			};
+
+			var closeContactForm = function() {
+				$('#id_comment').val('');
+				$light.find('li.button button').removeAttr('disabled');
+				$fade.hide();
+				$light.hide();
+			};
+
+			$('a.flagIt').click(function(ev) {
+				openContactForm();
+				ev.preventDefault();
+			});
+
+			$('a.close').click(function(ev) {
+				closeContactForm();
+				ev.preventDefault();
+			});
+
+			$flagForm.submit(function(ev) {
+				var params = {
+					csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+					reason: $('#id_reason').val(),
+					comment: $('#id_comment').val()
+				};
+				$.post('/contact/', params, function() {
+					$flagForm.hide();
+					$('div.thankyou').show();
+				});
+				$light.find('li.button button').attr('disabled', 'disabled');
+				ev.preventDefault();
+			});
+
+			/*
+			 * tab pane navigation
+			 */
+
+			$tabs = $('#cityNav li');
+			$tabs.click(function(ev) {
+				$tabs.removeClass('selected');
+				$(this).addClass('selected');
+				$('.tabContent').hide();
+				$('#tab-' + $(this).attr('data-tab')).show();
+				ev.preventDefault();
+			});
+
+			$('.tabContent').hide().first().show();
+
+			/*
+			 * resize charts
+			 */
+
+			// $(window).resize(function() {
+			// 	drawCharts();
+			// });
+
+		});
+
+	</script>
+{% endblock %}
+
+{% block css %}
+	<style>
+		table td b { font-weight: 700; }
+		span.cmp { display: block; font-size: .834em; color: #777; margin-top: 0.81em; }
+		.chart { margin-bottom: 2em; }
+	</style>
+{% endblock %}
+
+{% block content %}
+	<div id="cityDetail" class="{% if comparison.compare_to %}compare{% else %}single{% endif %}">
+		<div id="citySummary">
+			<div class="cityLeft">
+				<div id="cityName">
+					<h2>{{ location.name }}</h2>
+
+						vs <span class="comparisonCity">{% if compare_to %}{{ compare_to.name }}{% endif %}{% if not compare_to %}<a href="/locations/browse/?compareto={{ location.code }}">Select a comparison city...</a>{% endif %}</span>
+
+				</div>
+				<div class="cityBaseData narrow">
+					{% if location.census %}
+						<dl>
+							<dt>Population: </dt>
+							<dd>{{ location.census.population|intcomma }}</dd>
+							<dt>Median Age: </dt>
+							<dd>{{ location.census.median_age|floatformat:0 }}</dd>
+							<dt>Households With Children: </dt>
+							<dd>{{ location.census.with_children|floatformat:1 }}%</dd>
+							<dt>Vacant Housing: </dt>
+							<dd>{{ location.census.vacant_housing|floatformat:1 }}%</dd>
+						</dl>
+					{% else %}
+						<p>No census data found for this location.</p>
+					{% endif %}
+				</div>
+			</div>
+			{# <div id="cityMap" style="background-image: url(http://upwardlymobile.s3.amazonaws.com/maps/{{ location.code }}-400x400.png);"> #}
+            <div id="cityMap" style="background-image: url(http://maps.googleapis.com/maps/api/staticmap?sensor=false&amp;maptype=roadmap&amp;zoom=7&amp;center={{ location.geo.centroid.0 }},{{ location.geo.centroid.1 }}&amp;size=400x400);">
+				<img class="honingIn steep" src="../../static/images/honingIn_steep.png" width="169" height="179" alt="HoningIn Steep">
+				<img class="honingIn shallow" src="../../static/images/honingIn_shallow.png" width="200" height="138" alt="HoningIn Shallow">
+				<img class="honingIn narrow" src="../../static/images/honingIn_narrow.png" width="159" height="188" alt="HoningIn Narrow">
+			</div>
+			<div class="clear"></div>
+			<div class="cityBaseData wide">
+				{% if location.census %}
+					<dl>
+						<dt>Population: </dt>
+						<dd>{{ location.census.population|intcomma }}</dd>
+						<dt>Median Age: </dt>
+						<dd>{{ location.census.median_age|floatformat:0 }}</dd>
+						<dt>Households With Children: </dt>
+						<dd>{{ location.census.with_children|floatformat:1 }}%</dd>
+						<dt>Vacant Housing: </dt>
+						<dd>{{ location.census.vacant_housing|floatformat:1 }}%</dd>
+					</dl>
+				{% else %}
+					<p>No census data found for this location.</p>
+				{% endif %}
+			</div>
+
+
+		</div>
+		<div id="cityData">
+			<ul id="cityNav">
+				<li id="jobsTab" class="selected" data-tab="occupation">
+					<span class="tabLabel">
+						<span class="jobsIcon">Jobs</span>
+						<span class="{% bwe comparison.scores.cmp.occupation_score %}"></span>
+						<div class="clear"></div>
+					</span>
+				</li>
+				<li id="housingTab" data-tab="housing">
+					<span class="tabLabel">
+						<span class="housingIcon">Housing</span>
+						<span class="{% bwe comparison.scores.cmp.housing_score %}"></span>
+						<div class="clear"></div>
+					</span>
+				</li>
+				<li id="colTab" data-tab="col">
+					<span class="tabLabel">
+						<span class="colIcon">Cost of Living</span>
+						<span class="{% bwe comparison.scores.cmp.col_score %}"></span>
+						<div class="clear"></div>
+					</span>
+				</li>
+				<li id="qolTab" data-tab="qol">
+					<span class="tabLabel">
+						<span class="qolIcon">Quality of Life</span>
+						<span class="{% bwe comparison.scores.cmp.qol_score %}"></span>
+						<div class="clear"></div>
+					</span>
+				</li>
+			</ul>
+			<div class="clear"></div>
+
+			<!-- jobs -->
+			<div class="tabContent" id="tab-occupation">
+				{% include "locations/employment.html" %}
+			</div>
+
+			<!-- housing -->
+			<div class="tabContent" id="tab-housing">
+				{% include "locations/housing.html" %}
+			</div>
+
+			<!-- cost of living -->
+			<div class="tabContent" id="tab-col">
+				{% include "locations/costofliving.html" %}
+			</div>
+
+			<!-- quality of life -->
+			<div class="tabContent" id="tab-qol">
+				{% include "locations/qualityoflife.html" %}
+			</div>
+
+		</div>
+		<div id="light" class="white_content">
+			<a class="close" href="#">Close</a>
+			<div class="clear"></div>
+			<h2>Feedback</h2>
+			<small>Use the form below to send us your thoughts/concerns.</small>
+			<form action="/contact/" method="post" id="flagForm" class="normalForm">
+				{% csrf_token %}
+			    <ul>
+				    <li>
+						<label for="id_reason">What are you contacting is about?</label>
+						<select name="reason" id="id_reason">
+							<option>I have a question for you.</option>
+							<option>There is a problem with your data.</option>
+							<option>Something appears to be broken.</option>
+							<option>I like this tool a lot.</option>
+						</select>
+					</li>
+					<li>
+						<label for="id_comment"></label>
+						<textarea name="comment" id="id_comment"></textarea>
+					</li>
+					<li>
+						<label for="id_email">Email Address (optional)</label>
+						<input type="text" name="comment" id="id_comment"></input>
+					</li>
+				    <li class="button">
+				        <button id="submit" type="submit">
+		    				<span>Send</span>
+		    			</button>
+				    </li>
+				</ul>
+			</form>
+			<div class="thankyou">
+				<p>Thanks for sending us feedback!</p>
+			</div>
+
+		</div>
+		<div id="fade" class="black_overlay"></div>
+	</div>
+{% endblock %}
