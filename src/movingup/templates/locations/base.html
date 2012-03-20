@@ -220,6 +220,7 @@
 					comment: $('#id_comment').val()
 				};
 				$.post('/contact/', params, function() {
+                    window.scrollTo(0, 0);
 					$flagForm.hide();
 					$('div.thankyou').show();
 				});
