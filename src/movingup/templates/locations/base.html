@@ -379,8 +379,8 @@
 			<a class="close" href="#">Close</a>
 			<div class="clear"></div>
 			<h2>Feedback</h2>
-			<small>Use the form below to send us your thoughts/concerns.</small>
 			<form action="/contact/" method="post" id="flagForm" class="normalForm">
+                <small>Use the form below to send us your thoughts/concerns.</small>
 				{% csrf_token %}
 			    <ul>
 				    <li>
@@ -408,7 +408,7 @@
 				</ul>
 			</form>
 			<div class="thankyou">
-				<p>Thanks for sending us feedback!</p>
+				<small>Thanks for sending us feedback!</small>
 			</div>
 
 		</div>
