@@ -17,9 +17,11 @@
 	        <div id="map" style="height: 200px; width: 100%;"></div>
             {% for loc in locations %}
                 {% if compare_to %}
-                    <a href="/locations/{{ loc.code }}?occ={{ occupation.id }}&amp;compareto={{ compare_to.code }}">
+                    {# <a href="/locations/{{ loc.code }}?occ={{ occupation.id }}&amp;compareto={{ compare_to.code }}"> #}
+                    <a href="/locations/{{ loc.code }}?occ=00-0000&amp;compareto={{ compare_to.code }}">
                 {% else %}
-                    <a href="/locations/{{ loc.code }}?occ={{ occupation.id }}">
+                    {# <a href="/locations/{{ loc.code }}?occ={{ occupation.id }}"> #}
+                    <a href="/locations/{{ loc.code }}?occ=00-0000">
                 {% endif %}
                     <div class="srCity">
                         <h3 class="cityName">{{ loc.name }}</h3>

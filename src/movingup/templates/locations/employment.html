@@ -20,12 +20,14 @@
 	</div>
 	<div class="chart" id="salary-chart"></div>
 
-	{% if comparison.data.occupation.is_average %}
-		<p class="note">No occupation data found for {{ occupation.name }} in {{ location.name }}, using local salary average instead.</p>
-	{% endif %}
-	{% if compare_to %}
-		{% if comparison.data.occupation.compare_to.is_average %}
-			<p class="note">No occupation data found for {{ occupation.name }} in {{ compare_to.name }}, using local salary average instead.</p>
+	{% if occupation.id != '00-0000' %}
+		{% if comparison.data.occupation.is_average %}
+			<p class="note">No occupation data found for {{ occupation.name }} in {{ location.name }}, using local salary average instead.</p>
+		{% endif %}
+		{% if compare_to %}
+			{% if comparison.data.occupation.compare_to.is_average %}
+				<p class="note">No occupation data found for {{ occupation.name }} in {{ compare_to.name }}, using local salary average instead.</p>
+			{% endif %}
 		{% endif %}
 	{% endif %}
 </div>
