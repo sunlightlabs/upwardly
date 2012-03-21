@@ -11,16 +11,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>Upwardly Mobile</title>
+    <title>{% block title %}Upwardly Mobile{% endblock %}</title>
     <meta name="description" content="Upwardly Mobile lets people find out where in the country they would be better off by comparing various types of data and ranking it based on a person’s preferences. Now go ahead, start moving up!">
 
     <meta property="og:site_name" content="Upwardly Mobile">
+    <meta property="og:description" content="Upwardly Mobile lets people find out where in the country they would be better off by comparing various types of data and ranking it based on a person’s preferences. Now go ahead, start moving up!">
+    <meta property="og:type" content="website">
     <meta property="og:image" content="{% media_url "sharing/facebook-180x180.png" %}">
     <meta property="fb:admins" content="7812952">
     {% block opengraph %}
         <meta property="og:title" content="Upwardly Mobile">
-        <meta property="og:description" content="Upwardly Mobile lets people find out where in the country they would be better off by comparing various types of data and ranking it based on a person’s preferences. Now go ahead, start moving up!">
-        <meta property="og:type" content="website">
         <meta property="og:url" content="http://upwardly.us">
     {% endblock %}
 

@@ -119,8 +119,8 @@ def location_view(view):
 
         kwargs = {}
 
-        if 'occ' in request.GET and request.GET['occ']:
-            occupation_id = request.GET['occ']
+        if 'occ' in request.GET:
+            occupation_id = request.GET['occ'] or '00-0000'
         else:
             occupation_id = request.preferences.occupation_id
 

@@ -2,6 +2,13 @@
 {% load humanize %}
 {% load movingup_tags %}
 
+{% block title %}{{ location.name }}{% if compare_to %} v. {{ compare_to.name }}{% endif %} | Upwardly Mobile{% endblock %}
+
+{% block opengraph %}
+    <meta property="og:title" content="{{ location.name }}{% if compare_to %} v. {{ compare_to.name }}{% endif %}">
+    <meta property="og:url" content="http://upwardly.us{{ request.get_full_path }}">
+{% endblock %}
+
 {% block js %}
 	{% js "js/rgbcolor.js" %}
 	{% js "js/canvg.js" %}
