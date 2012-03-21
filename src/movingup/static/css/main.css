@@ -1126,9 +1126,9 @@ a.cowButton:hover #bubble {
     font-style: italic;
 }
 
-div.sharing { margin: 2em; height: 120px; }
-div.sharing iframe { margin: 0.4em 0; }
-div.sharing div.stupid-linkedin { display: block; }
+div.sharing { margin: 2em; height: 40px; }
+div.sharing iframe { display: inline-block; }
+div.sharing span.IN-widget { margin-right: 40px; }
 
 
 /* #Media Queries
