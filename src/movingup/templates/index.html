@@ -32,24 +32,11 @@
 {% block js %}
 	<script>
 		$(document).ready(function() {
-
-			if ($(document).width() >= 960) {
-
-				var jsloader = function(d, s, id, url) {
-					var js, fjs = d.getElementsByTagName(s)[0];
-					if (d.getElementById(id)) return;
-					js = d.createElement(s);
-					js.id = id;
-					js.src = url;
-					fjs.parentNode.insertBefore(js, fjs);
-				};
-
+			if (probablyNotMobile) {
 				jsloader(document, 'script', 'twitter-wjs', '//platform.twitter.com/widgets.js');
 				jsloader(document, 'script', 'linkedin-jssdk', '//platform.linkedin.com/in.js');
 				jsloader(document, 'script', 'facebook-jssdk', '//connect.facebook.net/en_US/all.js#xfbml=1');
-
 			}
-
 		});
 	</script>
 {% endblock %}
