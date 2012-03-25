@@ -224,7 +224,8 @@
 				var params = {
 					csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
 					reason: $('#id_reason').val(),
-					comment: $('#id_comment').val()
+					comment: $('#id_comment').val(),
+                    email: $('#id_email').val()
 				};
 				$.post('/contact/', params, function() {
                     window.scrollTo(0, 0);
@@ -382,23 +383,7 @@
 			<form action="/contact/" method="post" id="flagForm" class="normalForm">
 				{% csrf_token %}
 			    <ul>
-				    <li>
-						<label for="id_reason">What are you contacting is about?</label>
-						<select name="reason" id="id_reason">
-							<option>I have a question for you.</option>
-							<option>There is a problem with your data.</option>
-							<option>Something appears to be broken.</option>
-							<option>I like this tool a lot.</option>
-						</select>
-					</li>
-					<li>
-						<label for="id_comment"></label>
-						<textarea name="comment" id="id_comment"></textarea>
-					</li>
-					<li>
-						<label for="id_email">Email Address (optional)</label>
-						<input type="text" name="comment" id="id_comment"></input>
-					</li>
+				    {% include "_feedback_form.html" %}
 				    <li class="button">
 				        <button id="submit" type="submit">
 		    				<span>Send</span>

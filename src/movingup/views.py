@@ -43,13 +43,11 @@ def contact(request):
 
     if request.method == 'POST':
 
-        reason = request.POST.get('reason', None)
-        comment = request.POST.get('comment', None)
+        reason = request.POST.get('reason', '')
+        comment = request.POST.get('comment', '')
+        email = request.POST.get('email', '')
 
-        if reason is None or comment is None:
-            pass
-
-        message = "%s\n\n%s" % (reason, comment)
+        message = "%s\n\n%s\n\n%s" % (reason, comment, email)
 
         send_mail(
             '[Upwardly Mobile] Contact form submission',
@@ -60,9 +58,9 @@ def contact(request):
         )
 
     if request.is_ajax:
-        return HttpResponse('')
+        return HttpResponse('', content_type='text/plain')
     else:
-        pass
+        return HttpResponseRedirect('/')
 
 
 def debug(request):
