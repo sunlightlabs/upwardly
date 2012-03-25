@@ -1,7 +1,9 @@
 from decimal import Decimal
 import hashlib
+import json
 import pymongo
 
+from django.core.cache import cache
 from django.db import connection
 from movingup.data import db, mongo_fieldnames, sql_fieldnames
 from movingup.occupations import OCCUPATIONS
@@ -76,9 +78,14 @@ def cached_compare(occupation_id, location, compare_to=None, weights=None):
 
     key = hashlib.md5(key).hexdigest()
 
-    # actually do caching here
+    res = cache.get(key, None)
+    if res is None:
+        res = compare(occupation_id, location, compare_to, weights)
+        cache.set(key, json.dumps(res))
+    else:
+        res = json.loads(res)
 
-    return compare(occupation_id, location, compare_to, weights)
+    return res
 
 def compare(occupation_id, location, compare_to=None, weights=None):
 

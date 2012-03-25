@@ -114,5 +114,11 @@ DEBUG_TOOLBAR_CONFIG = {
 
 EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
 from local_settings import *
 
