@@ -44,28 +44,30 @@
             </div>
 			<ol>
             {% for loc in locations %}
-				<li>
-	                <a href="/locations/{{ loc.code }}/?compareto={{ current_location.id }}{% if occupation %}&amp;occ={{ occupation.id }}{% endif %}">
-	                    <div class="srCity">
-	                        <span class="cityName">{{ loc.name }}</span>
-	                        <div class="relativeScore">
-			                    <span class="mobileCatCont">
-		                            <span class="jobs {% bwe loc.occupation_score score.occupation_score %}">{% bwe loc.occupation_score score.occupation_score %}</span>
-								</span>
-			                    <span class="mobileCatCont">
-		                            <span class="housing {% bwe loc.housing_score score.housing_score %}">{% bwe loc.housing_score score.housing_score %}</span>
-								</span>
-			                    <span class="mobileCatCont">
-		                            <span class="col {% bwe loc.col_score score.col_score %}">{% bwe loc.col_score score.col_score %}</span>
-								</span>
-			                    <span class="mobileCatCont">
-		                            <span class="qol {% bwe loc.qol_score score.qol_score %}">{% bwe loc.qol_score score.qol_score %}</span>
-								</span>
-	                        </div>
-	                        <div class="clear"></div>
-	                    </div>
-	                </a>
-				</li>
+                {% if loc.code != '00000' %}
+    				<li>
+    	                <a href="/locations/{{ loc.code }}/?compareto={{ current_location.id }}{% if occupation %}&amp;occ={{ occupation.id }}{% endif %}">
+    	                    <div class="srCity">
+    	                        <span class="cityName">{{ loc.name }}</span>
+    	                        <div class="relativeScore">
+    			                    <span class="mobileCatCont">
+    		                            <span class="jobs {% bwe loc.occupation_score score.occupation_score %}">{% bwe loc.occupation_score score.occupation_score %}</span>
+    								</span>
+    			                    <span class="mobileCatCont">
+    		                            <span class="housing {% bwe loc.housing_score score.housing_score %}">{% bwe loc.housing_score score.housing_score %}</span>
+    								</span>
+    			                    <span class="mobileCatCont">
+    		                            <span class="col {% bwe loc.col_score score.col_score %}">{% bwe loc.col_score score.col_score %}</span>
+    								</span>
+    			                    <span class="mobileCatCont">
+    		                            <span class="qol {% bwe loc.qol_score score.qol_score %}">{% bwe loc.qol_score score.qol_score %}</span>
+    								</span>
+    	                        </div>
+    	                        <div class="clear"></div>
+    	                    </div>
+    	                </a>
+    				</li>
+                {% endif %}
             {% endfor %}
 			</ol>
         </div>
