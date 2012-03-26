@@ -85,7 +85,7 @@
 
                     $.each(locations, function(i, loc) {
 
-                        var url = '/locations/' + loc.code + '/?occ={{ occupation.id }}';
+                        var url = '/locations/' + loc.code + '/?occ=00-0000';
                         {% if compare_to %}
                             url += '&amp;compareto={{ compare_to.code }}';
                         {% endif %}
