@@ -88,7 +88,7 @@ class PreferencesMiddleware(object):
                 for weight, default_value in DEFAULT_WEIGHTS.iteritems():
 
                     if weight in selected_weights:
-                        request.session['preferences']['weights'][weight] = default_value + 2
+                        request.session['preferences']['weights'][weight] = default_value * 2
                     else:
                         request.session['preferences']['weights'][weight] = default_value
 

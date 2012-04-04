@@ -3,6 +3,7 @@ import pymongo
 
 DATA_FIELDS = {
     'ffiec': [
+        #'diff',
         'avg',
         'high',
         'low',

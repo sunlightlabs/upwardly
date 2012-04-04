@@ -9,11 +9,11 @@ from movingup.data import db, mongo_fieldnames, sql_fieldnames
 from movingup.occupations import OCCUPATIONS
 
 DEFAULT_WEIGHTS = {
-    'occupation_weight': 3,
+    'occupation_weight': 5,
     'childcare_weight': 1,
     'food_weight': 1,
     'transportation_weight': 1,
-    'housing_weight': 1,
+    'housing_weight': 3,
 }
 
 BASE_WEIGHT_DIVISOR = 3
@@ -49,6 +49,8 @@ def get_occupation_name(occ_id):
             return occ['name']
 
 def get_value(d, key):
+    if key == 'ffiec.avg':
+        key = 'ffiec.diff'
     if '.' in key:
         (k, rest) = key.split('.', 1)
         try:
@@ -303,7 +305,7 @@ def location_scores(occupation_id, current_location=None, weights=None):
             ON s.code = l.code
         WHERE s.occupation = %s AND l.code != %s
         ORDER BY score DESC
-        LIMIT 20
+        LIMIT 30
     """
 
     params = (
@@ -323,6 +325,9 @@ def location_scores(occupation_id, current_location=None, weights=None):
     cursor.execute(stmt, params)
     locations = [dict(zip(resfields, row)) for row in cursor]
     cursor.close()
+
+    for loc in locations:
+        print loc['name'], loc, weights['occupation_weight']
 
     return locations
 

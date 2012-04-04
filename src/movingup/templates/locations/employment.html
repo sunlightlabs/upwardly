@@ -66,9 +66,9 @@
 				{% endwith %}
 			</tr>
 			<tr class="even">
-				{% with comparison.data.ffiec_avg as data %}
+				{% with comparison.data.ffiec_high as data %}
 					<td class="compElement">
-						Average salary for all occupations
+						2010 average salary for all occupations
 						<span class="cmp">{{ data.value|currency }} per year</span>
 					</td>
 					<td class="vsCity">
@@ -84,9 +84,9 @@
 				{% endwith %}
 			</tr>
 			<tr class="odd">
-				{% with comparison.data.ffiec_high as data %}
+				{% with comparison.data.ffiec_low as data %}
 					<td class="compElement">
-						Highest salary average for all occupations
+						2004 average salary for all occupations
 						<span class="cmp">{{ data.value|currency }} per year</span>
 					</td>
 					<td class="vsCity">
@@ -102,9 +102,9 @@
 				{% endwith %}
 			</tr>
 			<tr class="even">
-				{% with comparison.data.ffiec_low as data %}
+				{% with comparison.data.ffiec_avg as data %}
 					<td class="compElement">
-						Lowest salary average for all occupations
+						6-year change in average salary for all occupations
 						<span class="cmp">{{ data.value|currency }} per year</span>
 					</td>
 					<td class="vsCity">
