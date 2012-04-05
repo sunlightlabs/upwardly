@@ -48,7 +48,7 @@ def get_occupation_name(occ_id):
         if occ['id'] == occ_id:
             return occ['name']
 
-def get_value(d, key):
+def get_value(d, key, default=0):
     if key == 'ffiec.avg':
         key = 'ffiec.diff'
     if '.' in key:
@@ -56,8 +56,7 @@ def get_value(d, key):
         try:
             val = get_value(d[k], rest)
         except KeyError:
-            if k.startswith('rpp_local'):
-                val = None
+            val = None if k.startswith('rpp_local') else default
         return val
     else:
         return d[key]

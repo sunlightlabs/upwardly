@@ -136,7 +136,7 @@ def location_view(view):
 
         if 'compareto' in request.GET:
             compare_msa = request.GET['compareto']
-            if compare_msa != msa:
+            if compare_msa != msa and compare_msa != '00000':
                 compare_to = db.k2.locations.find_one({'code': compare_msa})
                 #compare_to['scores'] = location_score(occupation_id, compare_msa)
 
