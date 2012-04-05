@@ -62,11 +62,14 @@ def filter(request):
         pass
 
     occupation_id = request.GET.get('occ', None) or request.preferences.occupation_id
-    pref_location = request.preferences['location']
+    pref_location = request.preferences.get('location', None)
 
     if pref_location is None:
-        # set message
-        pass # redirect to preferences
+        pref_location = {
+            'zipcode': '00000',
+            'name': 'United States',
+            'id': '00000',
+        }
 
     weights = request.preferences['weights']
 
