@@ -1,8 +1,12 @@
-from django.db import connection
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.utils.functional import wraps
-from pymongo import json_util
+
+try:
+    from pymongo import json_util
+except ImportError:
+    from bson import json_util
+
 import json
 
 from movingup import charts
@@ -11,11 +15,13 @@ from movingup.locations.models import (
     cached_compare, all_locations, get_occupation_name,
     location_score, location_scores, nearby_locations, nearby_zipcodes)
 
+
 def get_object_or_none(model, **kwargs):
     try:
         return model.objects.get(**kwargs)
     except model.DoesNotExist:
-        pass # just fall through to returning None
+        pass  # just fall through to returning None
+
 
 # index, search result view
 
@@ -26,6 +32,7 @@ def index(request):
         request.session['location'] = '10820'
 
     return render(request, 'locations/index.html')
+
 
 def browse(request):
 
@@ -53,6 +60,7 @@ def browse(request):
     context['locations'] = locations
 
     return render(request, 'locations/browse.html', context)
+
 
 # apply filters for occupation, etc.
 
@@ -88,6 +96,7 @@ def filter(request):
         'occupation': occupation,
     })
 
+
 # find nearby locations and zipcodes
 
 def nearby(request):
@@ -104,6 +113,7 @@ def nearby(request):
 
     return HttpResponseRedirect('/locations/')
 
+
 def zipcodes(request):
 
     if 'lat' in request.GET and 'lng' in request.GET:
@@ -113,6 +123,7 @@ def zipcodes(request):
         return HttpResponse(json.dumps(zipcodes, default=json_util.default), mimetype='application/json')
 
     return HttpResponseRedirect('/locations/')
+
 
 # location specific views
 
@@ -178,20 +189,24 @@ def overview(request, location, compare_to, comparison, **kwargs):
     }
     return render(request, 'locations/overview.html', context)
 
+
 @location_view
 def employment(request, location, compare_to, comparison, **kwargs):
     context = {'location': location, 'compare_to': compare_to, 'comparison': comparison}
     return render(request, 'locations/employment.html', context)
+
 
 @location_view
 def finances(request, location, compare_to, comparison, **kwargs):
     context = {'location': location, 'compare_to': compare_to, 'comparison': comparison}
     return render(request, 'locations/transportation.html', context)
 
+
 @location_view
 def housing(request, location, compare_to, comparison, **kwargs):
     context = {'location': location, 'compare_to': compare_to, 'comparison': comparison}
     return render(request, 'locations/housing.html', context)
+
 
 @location_view
 def lifestyle(request, location, compare_to, comparison, **kwargs):
