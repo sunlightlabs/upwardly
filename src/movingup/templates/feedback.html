@@ -16,7 +16,9 @@
 					csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
 					reason: $('#id_reason').val(),
 					comment: $('#id_comment').val(),
-					email: $('#id_email').val()
+					email: $('#id_email').val(),
+					humanity_question: $('#id_humanity_question').val(),
+					humanity_answer: $('#id_humanity_answer').val()
 				};
 				$.post('/contact/', params, function() {
                     $flagForm.hide();
@@ -36,7 +38,7 @@
 			</div>
 			<p>Use this form to send us your thoughts/concerns.</p>
 	    </div>
-		
+
 		<div class="right">
 			<div class="module">
 			<form action="/contact/" method="post" id="flagForm" class="normalForm">

@@ -1,5 +1,6 @@
 from movingup.locations.models import location_from_zip, get_occupation_name, DEFAULT_WEIGHTS
 
+
 class Preferences(dict):
 
     version = '1.0'

@@ -2,13 +2,15 @@ from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from movingup.data import db
-from movingup.forms import preferences_form
+from movingup.forms import preferences_form, ContactForm
 from movingup.locations.models import compare
 from movingup.occupations import OCCUPATIONS
 import json
 
+
 def home(request):
-	return render(request, 'index.html')
+    return render(request, 'index.html')
+
 
 def get_started(request):
 
@@ -31,6 +33,7 @@ def get_started(request):
 
     return render(request, 'preferences.html', {'form': form})
 
+
 def occupations(request, category_id=None):
     if category_id:
         category = OCCUPATIONS[int(category_id)]
@@ -39,23 +42,30 @@ def occupations(request, category_id=None):
         data = [(cat_id, cat['name']) for cat_id, cat in OCCUPATIONS.iteritems()]
     return HttpResponse(json.dumps(data), mimetype='application/json')
 
+
 def contact(request):
 
     if request.method == 'POST':
 
-        reason = request.POST.get('reason', '')
-        comment = request.POST.get('comment', '')
-        email = request.POST.get('email', '')
+        form = ContactForm(request.POST)
 
-        message = "%s\n\n%s\n\n%s" % (reason, comment, email)
+        print request.POST
 
-        send_mail(
-            '[Upwardly Mobile] Contact form submission',
-            message,
-            'contact@sunlightfoundation.com',
-            ['jcarbaugh@sunlightfoundation.com'],
-            fail_silently=True
-        )
+        if form.is_valid():
+
+            reason = request.POST.get('reason', '')
+            comment = request.POST.get('comment', '')
+            email = request.POST.get('email', '')
+
+            message = "%s\n\n%s\n\n%s" % (reason, comment, email)
+
+            send_mail(
+                '[Upwardly Mobile] Contact form submission',
+                message,
+                'contact@sunlightfoundation.com',
+                ['jcarbaugh@sunlightfoundation.com'],
+                fail_silently=True
+            )
 
     if request.is_ajax:
         return HttpResponse('', content_type='text/plain')
@@ -65,8 +75,8 @@ def contact(request):
 
 def debug(request):
 
-    loc_code = '44220' # Winchester, VA
-    cmp_code = '49020' # Springfield, OH
+    loc_code = '44220'  # Winchester, VA
+    cmp_code = '49020'  # Springfield, OH
     occ_id = '15-1179'
 
     loc = db.k2.locations.find_one({'code': loc_code})
@@ -78,4 +88,3 @@ def debug(request):
     }
 
     return HttpResponse(json.dumps(resp), mimetype='application/json')
-
