@@ -225,7 +225,9 @@
 					csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
 					reason: $('#id_reason').val(),
 					comment: $('#id_comment').val(),
-                    email: $('#id_email').val()
+                    email: $('#id_email').val(),
+                    humanity_question: $('#id_humanity_question').val(),
+                    humanity_answer: $('#id_humanity_answer').val()
 				};
 				$.post('/contact/', params, function() {
                     window.scrollTo(0, 0);
@@ -254,7 +256,7 @@
 		});
 
         $(document).bind('orientationchange', function() {
-            drawCharts(); 
+            drawCharts();
         });
 
 	</script>
