@@ -10,7 +10,12 @@
             Upwardly Mobile lets you find out where in the country it's best to live by comparing various types of salary, living and employment data and ranking it based on your preferences. Now go ahead, start moving up!
         </p>
         <div class="sharing">
-        	<div id="share-buttons"></div>
+        	<div class="share-buttons"
+				data-socialite="auto"
+				data-services="twitter-tweet,facebook-like,googleplus-one,linkedin-share"
+				data-options="linkBack=http://upwardly.us/&amp;width=150&amp;text=Compare%20the%20cost%20of%20living%20and%20average%20salaries%20between%20areas%20across%20the%20country&amp;showCounts=right"
+				data-facebook-like-options="layout=button_count"
+				data-twitter-tweet-options="via=sunfoundation"></div>
         </div>
     </div>
 	<div class="right">
@@ -21,39 +26,7 @@
 {% endblock %}
 
 {% block js %}
-	<script src="http://cdn.gigya.com/js/socialize.js?apiKey=3_BLRB_2LlQJZDUW1wb9_ZOps-sOnnzA_e6xxNSwJBBGoB-SavmPAKHkaVVZPE5Kx8"></script>
-    <script src="http://cdn.gigya.com/js/gigyaGAIntegration.js"></script>
 	<script>
-		$(document).ready(function() {
-			{% comment %}
-			if (probablyNotMobile) {
-				jsloader(document, 'script', 'twitter-wjs', '//platform.twitter.com/widgets.js');
-				jsloader(document, 'script', 'linkedin-jssdk', '//platform.linkedin.com/in.js');
-				jsloader(document, 'script', 'facebook-jssdk', '//connect.facebook.net/en_US/all.js#xfbml=1');
-			}
-			{% endcomment %}
-
-			var ua = new gigya.socialize.UserAction();
-
-	        ua.setLinkBack("http://upwardly.us/");
-	        ua.setTitle("Upwardly Mobile");
-	        ua.setDescription("Upwardly Mobile lets people find out where in the country they would be better off by comparing various types of data and ranking it based on a person’s preferences. Now go ahead, start moving up!");
-	        ua.addMediaItem({
-	            type: 'image',
-	            href: 'http://upwardly.us/',
-	            src: '{% media_url "sharing/facebook-180x180.png" %}'
-	        });
-
-	        var params = {
-	            containerID: 'share-buttons',
-	            layout: 'horizontal',
-	            shareButtons: 'facebook,twitter,linkedin',
-	            shortURLs: 'never',
-	            userAction: ua
-	        };
-
-	        gigya.socialize.showShareBarUI(params);
-
-		});
+		jsloader(document, 'script', 'socialite-js', 'https://s3.amazonaws.com/assets.sunlightfoundation.com/social/scripts/simple-socialite-pack.min.js');
 	</script>
 {% endblock %}
